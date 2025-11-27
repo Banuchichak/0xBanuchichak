@@ -1,0 +1,14 @@
+body {
+    background-color: black;
+    color: #00FF00;
+    font-family: "Fira Code", monospace;
+}
+
+a {
+    color: #00FF00;
+}
+
+a:hover {
+    color: #00AA00;
+}
+

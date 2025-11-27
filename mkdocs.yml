@@ -1,0 +1,13 @@
+site_name: 0xBanuchichak
+theme:
+  name: material
+  palette:
+    primary: "green"
+    accent: "black"
+  font:
+    text: "Fira Code"
+extra_css:
+  - css/custom.css
+extra_javascript:
+  - js/custom.js
+
