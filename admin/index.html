@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin — 0xbanuchichak</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    .admin-layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+    .admin-sidebar{background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+    .sidebar-logo{padding:1.5rem;border-bottom:1px solid var(--border)}
+    .sidebar-logo .logo{font-family:var(--font-display);font-size:.85rem;color:var(--green);display:block;text-shadow:0 0 15px rgba(0,255,65,.3)}
+    .sidebar-logo p{font-family:var(--font-mono);font-size:.65rem;color:var(--text-muted);margin-top:.3rem}
+    .sidebar-nav{padding:1rem 0;flex:1}
+    .sidebar-link{display:flex;align-items:center;gap:.7rem;padding:.7rem 1.5rem;font-family:var(--font-mono);font-size:.78rem;color:var(--text-dim);text-decoration:none;transition:all .2s;cursor:pointer;border:none;background:transparent;width:100%;text-align:left}
+    .sidebar-link:hover,.sidebar-link.active{color:var(--green);background:var(--green-glow);border-right:2px solid var(--green)}
+    .sidebar-link .icon{font-size:1rem}
+    .sidebar-bottom{padding:1rem;border-top:1px solid var(--border)}
+    .admin-main{padding:2rem;overflow-y:auto}
+    .admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+    .admin-title{font-family:var(--font-display);font-size:1.4rem;color:var(--green);text-shadow:0 0 20px rgba(0,255,65,.3)}
+    .admin-subtitle{font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted);margin-top:.3rem}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+    .editor-toolbar{display:flex;flex-wrap:wrap;gap:.3rem;background:var(--bg3);border:1px solid var(--border);border-bottom:none;padding:.6rem;border-radius:4px 4px 0 0}
+    .editor-btn{font-family:var(--font-mono);font-size:.7rem;padding:.3rem .6rem;background:transparent;border:1px solid var(--border);color:var(--text-dim);cursor:pointer;border-radius:2px;transition:all .2s}
+    .editor-btn:hover{background:var(--green-glow);border-color:var(--green);color:var(--green)}
+    #postContent{border-radius:0 0 4px 4px;min-height:400px;font-size:.88rem;line-height:1.7}
+    .editor-tabs{display:flex;gap:.5rem;margin-bottom:.5rem}
+    .editor-tab{font-family:var(--font-mono);font-size:.72rem;padding:.35rem .8rem;background:transparent;border:1px solid var(--border);color:var(--text-dim);cursor:pointer;border-radius:3px 3px 0 0;transition:all .2s}
+    .editor-tab.active{background:var(--bg3);border-color:var(--border-bright);color:var(--green);border-bottom-color:var(--bg3)}
+    .preview-box{min-height:400px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:0 0 4px 4px;padding:1.5rem;display:none}
+    .preview-box.visible{display:block}
+    .img-upload-zone{border:2px dashed var(--border);border-radius:6px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s;background:rgba(0,255,65,.02)}
+    .img-upload-zone:hover,.img-upload-zone.drag-over{border-color:var(--green);background:var(--green-glow)}
+    .img-upload-zone p{font-family:var(--font-mono);font-size:.8rem;color:var(--text-muted);margin-top:.5rem}
+    .images-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:1rem;margin-top:1.5rem}
+    .img-card{border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--bg-card);transition:all .2s}
+    .img-card:hover{border-color:var(--green)}
+    .img-card img{width:100%;height:100px;object-fit:cover;display:block}
+    .img-card-footer{padding:.5rem;display:flex;flex-direction:column;gap:.3rem}
+    .img-name{font-family:var(--font-mono);font-size:.6rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .img-actions{display:flex;gap:.3rem}
+    .settings-section{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin-bottom:1.5rem}
+    .settings-section h3{font-family:var(--font-display);font-size:.85rem;color:var(--green);margin-bottom:1.2rem;letter-spacing:1px}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+    .dash-stat{background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:4px;padding:1.2rem}
+    .dash-stat-num{font-family:var(--font-display);font-size:2rem;font-weight:900;color:var(--green);display:block}
+    .dash-stat-label{font-family:var(--font-mono);font-size:.65rem;color:var(--text-muted);letter-spacing:2px}
+    .admin-posts-list{display:flex;flex-direction:column;gap:.8rem}
+    .admin-post-item{background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;transition:all .2s}
+    .admin-post-item:hover{border-color:var(--border-bright)}
+    .admin-post-title{font-family:var(--font-display);font-size:.9rem;color:var(--text);flex:1}
+    .admin-post-meta{font-family:var(--font-mono);font-size:.7rem;color:var(--text-muted)}
+    .admin-post-actions{display:flex;gap:.5rem}
+    .auth-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;display:flex;align-items:center;justify-content:center}
+    .auth-box{background:var(--bg2);border:1px solid var(--border-bright);border-radius:8px;padding:3rem;width:100%;max-width:400px;box-shadow:0 0 60px rgba(0,255,65,.15)}
+    .auth-box h2{font-family:var(--font-display);font-size:1.2rem;color:var(--green);margin-bottom:.5rem}
+    .auth-box p{font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted);margin-bottom:2rem}
+    .tab-panel{display:none}.tab-panel.active{display:block}
+    @media(max-width:768px){.admin-layout{grid-template-columns:1fr}.admin-sidebar{position:relative;height:auto;flex-direction:row;overflow-x:auto}.sidebar-nav{display:flex;flex-direction:row;padding:0}.sidebar-logo,.sidebar-bottom{display:none}.form-row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="auth-modal" id="authModal">
+    <div class="auth-box">
+      <h2>// Admin Access</h2>
+      <p>Enter your password to access the admin panel.</p>
+      <div class="form-group">
+        <label class="form-label">PASSWORD</label>
+        <input type="password" id="authPass" class="form-input" placeholder="enter password..." autocomplete="current-password"/>
+      </div>
+      <div id="authError" class="alert alert-error">❌ Wrong password. Try again.</div>
+      <button class="btn btn-primary" onclick="doLogin()" style="width:100%">LOGIN →</button>
+    </div>
+  </div>
+
+  <div class="admin-layout" id="adminLayout" style="display:none">
+    <aside class="admin-sidebar">
+      <div class="sidebar-logo"><a href="../index.html" class="logo">0xbanuchichak</a><p>Admin Panel</p></div>
+      <nav class="sidebar-nav">
+        <button class="sidebar-link active" onclick="showPanel('dashboard')" id="nav-dashboard"><span class="icon">📊</span> Dashboard</button>
+        <button class="sidebar-link" onclick="showPanel('new-post')" id="nav-new-post"><span class="icon">✏️</span> New Post</button>
+        <button class="sidebar-link" onclick="showPanel('manage-posts')" id="nav-manage-posts"><span class="icon">📚</span> Manage Posts</button>
+        <button class="sidebar-link" onclick="showPanel('images')" id="nav-images"><span class="icon">🖼️</span> Images</button>
+        <button class="sidebar-link" onclick="showPanel('settings')" id="nav-settings"><span class="icon">⚙️</span> Settings</button>
+        <a href="../index.html" class="sidebar-link"><span class="icon">🌐</span> View Site</a>
+      </nav>
+      <div class="sidebar-bottom"><button class="btn btn-danger btn-sm" onclick="doLogout()" style="width:100%">Logout</button></div>
+    </aside>
+
+    <main class="admin-main">
+      <!-- DASHBOARD -->
+      <div id="panel-dashboard" class="tab-panel active">
+        <div class="admin-header">
+          <div><div class="admin-title">Dashboard</div><div class="admin-subtitle">Welcome back, 0xbanuchichak</div></div>
+          <button class="btn btn-primary" onclick="showPanel('new-post')">+ New Post</button>
+        </div>
+        <div class="stats-grid">
+          <div class="dash-stat"><span class="dash-stat-num" id="dash-post-count">0</span><span class="dash-stat-label">TOTAL POSTS</span></div>
+          <div class="dash-stat"><span class="dash-stat-num" id="dash-cat-count">0</span><span class="dash-stat-label">CATEGORIES</span></div>
+          <div class="dash-stat"><span class="dash-stat-num" id="dash-img-count">0</span><span class="dash-stat-label">IMAGES</span></div>
+        </div>
+        <div class="section-header" style="margin-bottom:1.5rem"><h2 class="section-title" style="font-size:1rem"><span class="accent">//</span> Recent Posts</h2></div>
+        <div id="dash-recent-posts"></div>
+      </div>
+
+      <!-- NEW POST -->
+      <div id="panel-new-post" class="tab-panel">
+        <div class="admin-header">
+          <div><div class="admin-title" id="postFormTitle">New Post</div><div class="admin-subtitle" id="postFormSubtitle">Write something awesome</div></div>
+          <div style="display:flex;gap:.8rem"><button class="btn btn-secondary" onclick="clearPostForm()">Clear</button><button class="btn btn-primary" onclick="savePost()">Publish →</button></div>
+        </div>
+        <div id="postAlert" class="alert"></div>
+        <input type="hidden" id="editPostId"/>
+        <div class="form-group"><label class="form-label">TITLE *</label><input type="text" id="postTitle" class="form-input" placeholder="e.g. HackTheBox — Machine Name Writeup"/></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">CATEGORY *</label>
+            <select id="postCategory" class="form-select">
+              <option value="">-- Select --</option>
+              <option value="ctf">CTF Writeup</option><option value="web">Web Security</option>
+              <option value="network">Network Security</option><option value="malware">Malware Analysis</option>
+              <option value="forensics">Forensics</option><option value="crypto">Cryptography</option>
+              <option value="oscp">OSCP Prep</option><option value="tool">Tool Review</option><option value="misc">Miscellaneous</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">TAGS (comma-separated)</label><input type="text" id="postTags" class="form-input" placeholder="linux, privesc, CVE"/></div>
+        </div>
+        <div class="form-group"><label class="form-label">EXCERPT (short summary)</label><input type="text" id="postExcerpt" class="form-input" placeholder="A short 1-2 sentence summary shown in post cards..."/></div>
+        <div class="form-group">
+          <label class="form-label">COVER IMAGE</label>
+          <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap">
+            <input type="text" id="coverImageUrl" class="form-input" placeholder="Paste image URL or pick from library..." style="flex:1"/>
+            <button class="btn btn-secondary btn-sm" onclick="openImagePicker('cover')">Pick from Library</button>
+            <label class="btn btn-secondary btn-sm" style="cursor:pointer">Upload New <input type="file" accept="image/*" style="display:none" onchange="uploadCoverDirect(this)"/></label>
+          </div>
+          <div id="coverPreview" style="margin-top:.8rem;display:none">
+            <img id="coverPreviewImg" src="" alt="" style="height:120px;border-radius:4px;border:1px solid var(--border);object-fit:cover"/>
+            <button class="btn btn-danger btn-sm" style="margin-left:.8rem;vertical-align:top" onclick="clearCover()">Remove</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">CONTENT * <span style="color:var(--text-muted);font-size:.65rem">(HTML supported — use toolbar buttons)</span></label>
+          <div class="editor-tabs">
+            <button class="editor-tab active" onclick="switchTab('write',this)">✏️ Write</button>
+            <button class="editor-tab" onclick="switchTab('preview',this)">👁 Preview</button>
+          </div>
+          <div class="editor-toolbar" id="editorToolbar">
+            <button class="editor-btn" onclick="iTag('h2')">H2</button>
+            <button class="editor-btn" onclick="iTag('h3')">H3</button>
+            <button class="editor-btn" onclick="wTag('strong')"><b>B</b></button>
+            <button class="editor-btn" onclick="wTag('em')"><i>I</i></button>
+            <button class="editor-btn" onclick="wTag('code')">`code`</button>
+            <button class="editor-btn" onclick="iCodeBlock()">```block</button>
+            <button class="editor-btn" onclick="iTag('p')">¶ Para</button>
+            <button class="editor-btn" onclick="iUL()">• List</button>
+            <button class="editor-btn" onclick="iTag('blockquote')">" Quote</button>
+            <button class="editor-btn" onclick="iHR()">— HR</button>
+            <button class="editor-btn" onclick="iLink()">🔗 Link</button>
+            <button class="editor-btn" onclick="openImagePicker('inline')">🖼 Image</button>
+          </div>
+          <textarea id="postContent" class="form-input form-textarea" placeholder="Write your post content here using HTML tags...&#10;&#10;Example:&#10;&lt;h2&gt;Introduction&lt;/h2&gt;&#10;&lt;p&gt;Your text here...&lt;/p&gt;&#10;&lt;pre&gt;&lt;code class='language-bash'&gt;nmap -sV target&lt;/code&gt;&lt;/pre&gt;"></textarea>
+          <div class="preview-box" id="previewBox"></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:1rem;margin-top:1rem">
+          <button class="btn btn-secondary" onclick="clearPostForm()">Clear Form</button>
+          <button class="btn btn-primary" onclick="savePost()">🚀 Publish Post</button>
+        </div>
+      </div>
+
+      <!-- MANAGE POSTS -->
+      <div id="panel-manage-posts" class="tab-panel">
+        <div class="admin-header">
+          <div><div class="admin-title">Manage Posts</div><div class="admin-subtitle">Edit or delete your posts</div></div>
+          <button class="btn btn-primary" onclick="showPanel('new-post')">+ New Post</button>
+        </div>
+        <div id="adminPostsList"></div>
+      </div>
+
+      <!-- IMAGES -->
+      <div id="panel-images" class="tab-panel">
+        <div class="admin-header"><div><div class="admin-title">Image Library</div><div class="admin-subtitle">Upload and manage images</div></div></div>
+        <div class="settings-section">
+          <h3>// UPLOAD IMAGES</h3>
+          <div class="img-upload-zone" id="uploadZone" onclick="document.getElementById('bulkImgInput').click()">
+            <div style="font-size:3rem">📸</div>
+            <p>Click or drag &amp; drop images here</p>
+            <p style="font-size:.7rem;margin-top:.3rem">JPG, PNG, GIF, WebP — stored in browser localStorage</p>
+            <input type="file" id="bulkImgInput" multiple accept="image/*" style="display:none" onchange="uploadImages(this.files)"/>
+          </div>
+          <div id="uploadProgress" style="display:none;margin-top:1rem;font-family:var(--font-mono);font-size:.8rem;color:var(--green)"></div>
+        </div>
+        <div class="section-header" style="margin-bottom:1rem">
+          <h2 class="section-title" style="font-size:1rem"><span class="accent">//</span> Uploaded Images</h2>
+          <span id="imgCountLabel" style="font-family:var(--font-mono);font-size:.7rem;color:var(--text-muted)"></span>
+        </div>
+        <div class="images-grid" id="imagesGrid"><div style="font-family:var(--font-mono);font-size:.8rem;color:var(--text-muted)">No images uploaded yet.</div></div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div id="panel-settings" class="tab-panel">
+        <div class="admin-header"><div><div class="admin-title">Settings</div><div class="admin-subtitle">Customize your blog</div></div></div>
+        <div class="settings-section">
+          <h3>// BLOG IDENTITY</h3>
+          <div class="form-group"><label class="form-label">BLOG TITLE</label><input type="text" id="setBlogTitle" class="form-input" placeholder="0xbanuchichak"/></div>
+          <div class="form-group"><label class="form-label">TAGLINE</label><input type="text" id="setBlogTagline" class="form-input" placeholder="Security researcher | CTF player"/></div>
+          <div class="form-group"><label class="form-label">BIO</label><textarea id="setBlogBio" class="form-input form-textarea" style="min-height:80px" placeholder="Write about yourself..."></textarea></div>
+          <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+        </div>
+        <div class="settings-section">
+          <h3>// SOCIAL LINKS</h3>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">GITHUB URL</label><input type="url" id="setGithub" class="form-input" placeholder="https://github.com/..."/></div>
+            <div class="form-group"><label class="form-label">TWITTER/X URL</label><input type="url" id="setTwitter" class="form-input" placeholder="https://twitter.com/..."/></div>
+            <div class="form-group"><label class="form-label">LINKEDIN URL</label><input type="url" id="setLinkedin" class="form-input" placeholder="https://linkedin.com/in/..."/></div>
+            <div class="form-group"><label class="form-label">EMAIL</label><input type="email" id="setEmail" class="form-input" placeholder="you@example.com"/></div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()">Save Social Links</button>
+        </div>
+        <div class="settings-section">
+          <h3>// CHANGE PASSWORD</h3>
+          <div class="form-group"><label class="form-label">NEW PASSWORD</label><input type="password" id="newPass1" class="form-input" placeholder="New password"/></div>
+          <div class="form-group"><label class="form-label">CONFIRM NEW PASSWORD</label><input type="password" id="newPass2" class="form-input" placeholder="Confirm"/></div>
+          <div id="passAlert" class="alert"></div>
+          <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+          <p style="font-family:var(--font-mono);font-size:.7rem;color:var(--text-muted);margin-top:1rem">⚠️ Also update ADMIN_PASSWORD in js/posts-data.js for a permanent change.</p>
+        </div>
+        <div class="settings-section">
+          <h3>// DATA MANAGEMENT</h3>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap">
+            <button class="btn btn-secondary" onclick="exportData()">📤 Export All Data</button>
+            <label class="btn btn-secondary" style="cursor:pointer">📥 Import Data <input type="file" accept=".json" style="display:none" onchange="importData(this)"/></label>
+            <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- IMAGE PICKER -->
+  <div id="imagePickerModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;overflow-y:auto">
+    <div style="max-width:800px;margin:2rem auto;padding:2rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+        <h3 style="font-family:var(--font-display);color:var(--green)">// Pick an Image</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeImagePicker()">✕ Close</button>
+      </div>
+      <div class="images-grid" id="pickerGrid"></div>
+    </div>
+  </div>
+
+  <script src="../js/posts-data.js"></script>
+  <script>
+    let imgPickerTarget=null;
+
+    function escHtml(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+    // AUTH
+    function doLogin(){const p=document.getElementById('authPass').value;if(Auth.login(p)){document.getElementById('authModal').style.display='none';document.getElementById('adminLayout').style.display='grid';initDashboard();}else{const e=document.getElementById('authError');e.classList.add('visible');setTimeout(()=>e.classList.remove('visible'),3000);}}
+    document.getElementById('authPass').addEventListener('keyup',e=>{if(e.key==='Enter')doLogin();});
+    function doLogout(){Auth.logout();location.reload();}
+
+    window.addEventListener('DOMContentLoaded',()=>{
+      if(Auth.isLoggedIn()){document.getElementById('authModal').style.display='none';document.getElementById('adminLayout').style.display='grid';initDashboard();}
+      const zone=document.getElementById('uploadZone');
+      zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+      zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+      zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');uploadImages(e.dataTransfer.files);});
+      document.getElementById('coverImageUrl').addEventListener('input',previewCoverUrl);
+    });
+
+    function initDashboard(){renderDashboard();renderAdminPosts();renderImagesGrid();loadSettings();}
+
+    function showPanel(name){
+      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+      document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
+      document.getElementById('panel-'+name).classList.add('active');
+      const n=document.getElementById('nav-'+name);if(n)n.classList.add('active');
+      if(name==='manage-posts')renderAdminPosts();
+      if(name==='images')renderImagesGrid();
+      if(name==='dashboard')renderDashboard();
+    }
+
+    function renderDashboard(){
+      const posts=PostsDB.getAll(),imgs=ImagesDB.getAll();
+      document.getElementById('dash-post-count').textContent=posts.length;
+      document.getElementById('dash-cat-count').textContent=PostsDB.getCategories().length;
+      document.getElementById('dash-img-count').textContent=imgs.length;
+      const c=document.getElementById('dash-recent-posts');
+      if(!posts.length){c.innerHTML='<p style="font-family:var(--font-mono);color:var(--text-muted)">No posts yet.</p>';return;}
+      c.innerHTML='<div class="admin-posts-list">'+posts.slice(0,5).map(p=>`<div class="admin-post-item"><span class="post-tag">${escHtml(p.category)}</span><span class="admin-post-title">${escHtml(p.title)}</span><span class="admin-post-meta">${new Date(p.createdAt).toLocaleDateString()}</span><div class="admin-post-actions"><button class="btn btn-secondary btn-sm" onclick="editPost('${p.id}')">Edit</button><a href="../post.html?id=${p.id}" target="_blank" class="btn btn-secondary btn-sm">View</a></div></div>`).join('')+'</div>';
+    }
+
+    function savePost(){
+      const title=document.getElementById('postTitle').value.trim();
+      const cat=document.getElementById('postCategory').value;
+      const content=document.getElementById('postContent').value.trim();
+      const excerpt=document.getElementById('postExcerpt').value.trim();
+      const tags=document.getElementById('postTags').value.trim();
+      const cover=document.getElementById('coverImageUrl').value.trim();
+      const editId=document.getElementById('editPostId').value;
+      if(!title||!cat||!content){showPostAlert('❌ Title, Category, and Content are required.','error');return;}
+      const data={title,category:cat,content,excerpt,tags,coverImage:cover};
+      if(editId){PostsDB.update(editId,data);showPostAlert('✅ Post updated!','success');document.getElementById('editPostId').value='';document.getElementById('postFormTitle').textContent='New Post';}
+      else{PostsDB.add(data);showPostAlert('🚀 Post published!','success');}
+      clearPostForm();
+      setTimeout(()=>showPanel('manage-posts'),1200);
+    }
+
+    function editPost(id){
+      const post=PostsDB.getById(id);if(!post)return;
+      showPanel('new-post');
+      document.getElementById('editPostId').value=id;
+      document.getElementById('postTitle').value=post.title||'';
+      document.getElementById('postCategory').value=post.category||'';
+      document.getElementById('postExcerpt').value=post.excerpt||'';
+      document.getElementById('postTags').value=post.tags||'';
+      document.getElementById('postContent').value=post.content||'';
+      document.getElementById('coverImageUrl').value=post.coverImage||'';
+      document.getElementById('postFormTitle').textContent='Edit Post';
+      document.getElementById('postFormSubtitle').textContent=post.title;
+      previewCoverUrl();
+    }
+
+    function deletePost(id,title){if(!confirm('Delete "'+title+'"?'))return;PostsDB.delete(id);renderAdminPosts();renderDashboard();}
+
+    function clearPostForm(){['postTitle','postCategory','postExcerpt','postTags','postContent','coverImageUrl','editPostId'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('coverPreview').style.display='none';document.getElementById('postFormTitle').textContent='New Post';document.getElementById('postFormSubtitle').textContent='Write something awesome';}
+
+    function showPostAlert(msg,type){const e=document.getElementById('postAlert');e.textContent=msg;e.className='alert alert-'+type+' visible';setTimeout(()=>e.classList.remove('visible'),4000);}
+
+    function renderAdminPosts(){
+      const posts=PostsDB.getAll(),c=document.getElementById('adminPostsList');
+      if(!posts.length){c.innerHTML='<p style="font-family:var(--font-mono);color:var(--text-muted);padding:2rem;text-align:center">No posts yet. <a href="#" onclick="showPanel(\'new-post\')" style="color:var(--green)">Create your first post →</a></p>';return;}
+      c.innerHTML='<div class="admin-posts-list">'+posts.map(p=>`<div class="admin-post-item"><span class="post-tag" style="flex-shrink:0">${escHtml(p.category)}</span><span class="admin-post-title">${escHtml(p.title)}</span><span class="admin-post-meta">${new Date(p.createdAt).toLocaleDateString()}</span><div class="admin-post-actions" style="flex-shrink:0"><button class="btn btn-secondary btn-sm" onclick="editPost('${p.id}')">✏️</button><a href="../post.html?id=${p.id}" target="_blank" class="btn btn-secondary btn-sm">👁</a><button class="btn btn-danger btn-sm" onclick="deletePost('${p.id}','${escHtml(p.title).replace(/'/g,"\\'")}')">🗑</button></div></div>`).join('')+'</div>';
+    }
+
+    // Editor helpers
+    function getEd(){return document.getElementById('postContent');}
+    function ins(txt){const e=getEd(),s=e.selectionStart,end=e.selectionEnd;e.value=e.value.substring(0,s)+txt+e.value.substring(end);e.selectionStart=e.selectionEnd=s+txt.length;e.focus();}
+    function wTag(tag){const e=getEd(),s=e.selectionStart,end=e.selectionEnd,sel=e.value.substring(s,end)||'text';ins('<'+tag+'>'+sel+'</'+tag+'>');}
+    function iTag(tag){const e=getEd(),sel=e.value.substring(e.selectionStart,e.selectionEnd)||'Your text here';ins('<'+tag+'>'+sel+'</'+tag+'>\n');}
+    function iCodeBlock(){ins('\n<pre><code class="language-bash">your code here</code></pre>\n');}
+    function iUL(){ins('\n<ul>\n  <li>Item one</li>\n  <li>Item two</li>\n  <li>Item three</li>\n</ul>\n');}
+    function iHR(){ins('\n<hr style="border-color:var(--border);margin:2rem 0"/>\n');}
+    function iLink(){const url=prompt('URL:');const txt=prompt('Link text:','click here');if(url)ins('<a href="'+url+'" target="_blank">'+(txt||url)+'</a>');}
+    function switchTab(tab,btn){
+      document.querySelectorAll('.editor-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+      const ta=document.getElementById('postContent'),pv=document.getElementById('previewBox'),tb=document.getElementById('editorToolbar');
+      if(tab==='preview'){pv.innerHTML=ta.value;pv.classList.add('visible');ta.style.display='none';tb.style.display='none';}
+      else{pv.classList.remove('visible');ta.style.display='';tb.style.display='';}
+    }
+
+    // Cover image
+    function previewCoverUrl(){const v=document.getElementById('coverImageUrl').value.trim(),w=document.getElementById('coverPreview'),img=document.getElementById('coverPreviewImg');if(v){img.src=v;w.style.display='';}else{w.style.display='none';}}
+    function clearCover(){document.getElementById('coverImageUrl').value='';document.getElementById('coverPreview').style.display='none';}
+    function uploadCoverDirect(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{const entry=ImagesDB.add(file.name,e.target.result);if(entry){document.getElementById('coverImageUrl').value=entry.url;previewCoverUrl();}else alert('Storage full! Try smaller image.');};r.readAsDataURL(file);}
+
+    // Images
+    function uploadImages(files){
+      const prog=document.getElementById('uploadProgress');prog.style.display='';let done=0;
+      Array.from(files).forEach(file=>{const r=new FileReader();r.onload=e=>{const entry=ImagesDB.add(file.name,e.target.result);done++;prog.textContent=(entry?'✅ Uploaded '+done+'/'+files.length+': '+file.name:'⚠️ Storage full at '+done);if(done===files.length){setTimeout(()=>{prog.style.display='none';},2000);renderImagesGrid();renderDashboard();}};r.readAsDataURL(file);});
+    }
+
+    function renderImagesGrid(targetEl,forPicker){
+      const imgs=ImagesDB.getAll();
+      const grid=targetEl||document.getElementById('imagesGrid');
+      const label=document.getElementById('imgCountLabel');
+      if(label)label.textContent='['+imgs.length+' image'+(imgs.length!==1?'s':'')+']';
+      if(!imgs.length){grid.innerHTML='<div style="font-family:var(--font-mono);font-size:.8rem;color:var(--text-muted);grid-column:1/-1">No images uploaded yet.</div>';return;}
+      grid.innerHTML=imgs.map(img=>`<div class="img-card"><img src="${img.url}" alt="${escHtml(img.name)}" loading="lazy"/><div class="img-card-footer"><div class="img-name">${escHtml(img.name)}</div><div class="img-actions">${forPicker?`<button class="btn btn-primary btn-sm" style="flex:1" onclick="pickImage('${img.id}')">Use</button>`:`<button class="btn btn-secondary btn-sm" style="flex:1" onclick="copyImgTag('${img.id}')">Copy</button><button class="btn btn-danger btn-sm" onclick="delImg('${img.id}')">🗑</button>`}</div></div></div>`).join('');
+    }
+
+    function copyImgTag(id){const img=ImagesDB.getAll().find(i=>i.id===id);if(!img)return;navigator.clipboard.writeText('<img src="'+img.url+'" alt="'+img.name+'" style="max-width:100%"/>').then(()=>alert('HTML tag copied!'));}
+    function delImg(id){if(!confirm('Delete image?'))return;ImagesDB.delete(id);renderImagesGrid();renderDashboard();}
+    function openImagePicker(target){imgPickerTarget=target;const m=document.getElementById('imagePickerModal'),g=document.getElementById('pickerGrid');m.style.display='';renderImagesGrid(g,true);}
+    function closeImagePicker(){document.getElementById('imagePickerModal').style.display='none';imgPickerTarget=null;}
+    function pickImage(id){const img=ImagesDB.getAll().find(i=>i.id===id);if(!img)return;if(imgPickerTarget==='cover'){document.getElementById('coverImageUrl').value=img.url;previewCoverUrl();}else if(imgPickerTarget==='inline'){ins('\n<img src="'+img.url+'" alt="'+img.name+'" style="max-width:100%;border-radius:4px"/>\n');}closeImagePicker();}
+
+    // Settings
+    function loadSettings(){const s=JSON.parse(localStorage.getItem('banu_settings')||'{}');if(s.title)document.getElementById('setBlogTitle').value=s.title;if(s.tagline)document.getElementById('setBlogTagline').value=s.tagline;if(s.bio)document.getElementById('setBlogBio').value=s.bio;if(s.github)document.getElementById('setGithub').value=s.github;if(s.twitter)document.getElementById('setTwitter').value=s.twitter;if(s.linkedin)document.getElementById('setLinkedin').value=s.linkedin;if(s.email)document.getElementById('setEmail').value=s.email;}
+    function saveSettings(){const s={title:document.getElementById('setBlogTitle').value,tagline:document.getElementById('setBlogTagline').value,bio:document.getElementById('setBlogBio').value,github:document.getElementById('setGithub').value,twitter:document.getElementById('setTwitter').value,linkedin:document.getElementById('setLinkedin').value,email:document.getElementById('setEmail').value};localStorage.setItem('banu_settings',JSON.stringify(s));alert('✅ Settings saved!');}
+    function changePassword(){const p1=document.getElementById('newPass1').value,p2=document.getElementById('newPass2').value,el=document.getElementById('passAlert');if(!p1){el.textContent='Enter a password.';el.className='alert alert-error visible';return;}if(p1!==p2){el.textContent='Passwords do not match.';el.className='alert alert-error visible';return;}localStorage.setItem('banu_pass_override',p1);el.textContent='✅ Password updated for this session!';el.className='alert alert-success visible';}
+
+    // Data
+    function exportData(){const data={posts:PostsDB.getAll(),images:ImagesDB.getAll(),settings:JSON.parse(localStorage.getItem('banu_settings')||'{}'),exported:new Date().toISOString()};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='0xbanuchichak-backup.json';a.click();URL.revokeObjectURL(url);}
+    function importData(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{try{const d=JSON.parse(e.target.result);if(d.posts)PostsDB.save(d.posts);if(d.images)localStorage.setItem(ImagesDB.KEY,JSON.stringify(d.images));if(d.settings)localStorage.setItem('banu_settings',JSON.stringify(d.settings));alert('✅ Data imported!');initDashboard();}catch{alert('❌ Invalid backup file.');}};r.readAsText(file);}
+    function clearAllData(){if(!confirm('⚠️ Delete ALL posts and images?'))return;if(!confirm('Last chance!'))return;localStorage.removeItem('banu_posts');localStorage.removeItem('banu_images');alert('All data cleared.');initDashboard();}
+  </script>
+</body>
+</html>

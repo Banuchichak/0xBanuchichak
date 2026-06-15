@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>0xbanuchichak — Cybersecurity Blog</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="matrix-bg" id="matrixBg"></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-wrap">
+        <span class="logo-prefix">~/</span>
+        <a href="index.html" class="logo">0xbanuchichak</a>
+        <span class="cursor-blink">_</span>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link active">home</a>
+        <a href="posts.html" class="nav-link">posts</a>
+        <a href="about.html" class="nav-link">about</a>
+        <a href="admin/index.html" class="nav-link admin-link" title="Admin Panel">&#9881; admin</a>
+      </nav>
+      <div class="header-status">
+        <span class="status-dot"></span>
+        <span class="status-text">SYSTEM ONLINE</span>
+      </div>
+    </div>
+  </header>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="terminal-window">
+        <div class="terminal-bar">
+          <span class="t-btn red"></span><span class="t-btn yellow"></span><span class="t-btn green"></span>
+          <span class="t-title">banuchichak@kali:~</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-line"><span class="t-prompt">$</span> whoami</div>
+          <div class="t-line t-output">0xbanuchichak</div>
+          <div class="t-line"><span class="t-prompt">$</span> cat /etc/mission</div>
+          <div class="t-line t-output">Security researcher | CTF player | Red teamer</div>
+          <div class="t-line t-output">Writing about what I break, learn, and exploit.</div>
+          <div class="t-line"><span class="t-prompt">$</span> ls ./topics</div>
+          <div class="t-line t-output topics-line">
+            <span class="tag">web_security</span><span class="tag">ctf</span><span class="tag">malware</span>
+            <span class="tag">network</span><span class="tag">oscp</span><span class="tag">tools</span>
+          </div>
+          <div class="t-line"><span class="t-prompt">$</span><span class="cursor-inline">▮</span></div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card"><span class="stat-num" id="postCount">0</span><span class="stat-label">POSTS</span></div>
+        <div class="stat-card"><span class="stat-num" id="categoryCount">0</span><span class="stat-label">TOPICS</span></div>
+        <div class="stat-card"><span class="stat-num">∞</span><span class="stat-label">LEARNING</span></div>
+      </div>
+    </div>
+  </section>
+  <main class="main-content">
+    <div class="section-header">
+      <h2 class="section-title"><span class="accent">//</span> Latest Posts</h2>
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-filter="all">ALL</button>
+      </div>
+    </div>
+    <div class="posts-grid" id="postsGrid">
+      <div class="no-posts" id="noPosts">
+        <p>&#x1F4C2; No posts yet. <a href="admin/index.html">Write your first post →</a></p>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span class="logo">0xbanuchichak</span>
+        <p>Exploring the dark side of security, one writeup at a time.</p>
+      </div>
+      <div class="footer-right">
+        <div class="footer-links">
+          <a href="https://github.com/" target="_blank">GitHub</a>
+          <a href="https://twitter.com/" target="_blank">Twitter</a>
+          <a href="https://linkedin.com/" target="_blank">LinkedIn</a>
+        </div>
+        <p class="footer-copy">© 2025 0xbanuchichak. Built with ♥ &amp; caffeine.</p>
+      </div>
+    </div>
+  </footer>
+  <script src="js/posts-data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/matrix.js"></script>
+</body>
+</html>

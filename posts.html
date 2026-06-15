@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Posts — 0xbanuchichak</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="scanlines"></div><div class="matrix-bg" id="matrixBg"></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-wrap"><span class="logo-prefix">~/</span><a href="index.html" class="logo">0xbanuchichak</a><span class="cursor-blink">_</span></div>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">home</a><a href="posts.html" class="nav-link active">posts</a>
+        <a href="about.html" class="nav-link">about</a><a href="admin/index.html" class="nav-link admin-link">&#9881; admin</a>
+      </nav>
+      <div class="header-status"><span class="status-dot"></span><span class="status-text">SYSTEM ONLINE</span></div>
+    </div>
+  </header>
+  <div class="posts-list-page">
+    <div class="section-header" style="margin-bottom:2rem">
+      <h1 class="section-title"><span class="accent">//</span> All Posts</h1>
+      <div style="position:relative;max-width:400px;width:100%">
+        <span style="position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:var(--text-muted);font-family:var(--font-mono);font-size:.75rem">$</span>
+        <input type="text" id="searchInput" class="form-input" placeholder="search posts..." style="padding-left:2rem"/>
+      </div>
+    </div>
+    <div style="display:flex;gap:1rem;align-items:center;margin-bottom:2rem;flex-wrap:wrap">
+      <div class="filter-bar" id="filterBar"><button class="filter-btn active" data-filter="all">ALL</button></div>
+      <span id="postCountLabel" style="font-family:var(--font-mono);font-size:.72rem;color:var(--text-muted);margin-left:auto"></span>
+    </div>
+    <div class="posts-grid" id="postsGrid">
+      <div class="no-posts" id="noPosts"><p>&#x1F4C2; No posts yet. <a href="admin/index.html">Write your first post →</a></p></div>
+    </div>
+  </div>
+  <footer class="site-footer"><div class="footer-inner"><div class="footer-left"><span class="logo">0xbanuchichak</span><p>Exploring the dark side of security, one writeup at a time.</p></div><div class="footer-right"><div class="footer-links"><a href="https://github.com/" target="_blank">GitHub</a></div><p class="footer-copy">© 2025 0xbanuchichak.</p></div></div></footer>
+  <script src="js/posts-data.js"></script>
+  <script src="js/matrix.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let cur='all',search='';
+    function renderPosts(){
+      const grid=document.getElementById('postsGrid'),no=document.getElementById('noPosts'),label=document.getElementById('postCountLabel');
+      grid.querySelectorAll('.post-card').forEach(e=>e.remove());
+      let posts=PostsDB.getAll();
+      if(cur!=='all')posts=posts.filter(p=>p.category===cur);
+      if(search){const q=search.toLowerCase();posts=posts.filter(p=>(p.title||'').toLowerCase().includes(q)||(p.category||'').toLowerCase().includes(q)||(p.excerpt||'').toLowerCase().includes(q));}
+      label.textContent='['+posts.length+' post'+(posts.length!==1?'s':'')+']';
+      if(posts.length===0){no.style.display='';no.querySelector('p').textContent=search?'No posts matching "'+search+'"':'No posts yet.';return;}
+      no.style.display='none';
+      posts.forEach((p,i)=>grid.appendChild(createPostCard(p,i)));
+    }
+    function buildFilters(){
+      const bar=document.getElementById('filterBar');
+      bar.querySelectorAll('.filter-btn[data-filter]:not([data-filter="all"])').forEach(b=>b.remove());
+      PostsDB.getCategories().forEach(cat=>{
+        const btn=document.createElement('button');btn.className='filter-btn';btn.dataset.filter=cat;btn.textContent=cat.toUpperCase();
+        btn.addEventListener('click',()=>{bar.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');cur=cat;renderPosts();});
+        bar.appendChild(btn);
+      });
+      document.querySelector('[data-filter="all"]').addEventListener('click',function(){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');cur='all';renderPosts();});
+    }
+    document.addEventListener('DOMContentLoaded',()=>{buildFilters();renderPosts();document.getElementById('searchInput').addEventListener('input',e=>{search=e.target.value.trim();renderPosts();});});
+  </script>
+</body>
+</html>

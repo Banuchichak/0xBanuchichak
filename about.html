@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>About — 0xbanuchichak</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    .cert-badge{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--border);background:var(--bg-card);padding:.5rem 1rem;border-radius:4px;font-family:var(--font-mono);font-size:.75rem;color:var(--green-dim);margin:.3rem;transition:all .2s}
+    .cert-badge:hover{border-color:var(--green);color:var(--green);background:var(--green-glow)}
+    .cert-badge .dot{color:var(--green)}
+    .timeline-item{border-left:2px solid var(--border);padding:0 0 2rem 1.5rem;position:relative}
+    .timeline-item::before{content:'';width:10px;height:10px;background:var(--green);border-radius:50%;position:absolute;left:-6px;top:5px;box-shadow:0 0 10px var(--green)}
+    .timeline-date{font-family:var(--font-mono);font-size:.7rem;color:var(--text-muted);margin-bottom:.3rem}
+    .timeline-title{font-family:var(--font-display);font-size:.95rem;color:var(--green-dim);margin-bottom:.3rem}
+  </style>
+</head>
+<body>
+  <div class="scanlines"></div><div class="matrix-bg" id="matrixBg"></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-wrap"><span class="logo-prefix">~/</span><a href="index.html" class="logo">0xbanuchichak</a><span class="cursor-blink">_</span></div>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">home</a><a href="posts.html" class="nav-link">posts</a>
+        <a href="about.html" class="nav-link active">about</a><a href="admin/index.html" class="nav-link admin-link">&#9881; admin</a>
+      </nav>
+      <div class="header-status"><span class="status-dot"></span><span class="status-text">SYSTEM ONLINE</span></div>
+    </div>
+  </header>
+  <div class="about-page">
+    <h1>// about me</h1>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:6px;padding:1.5rem;margin-bottom:2.5rem;font-family:var(--font-mono);font-size:.85rem">
+      <div style="color:var(--text-muted);margin-bottom:.3rem">$ cat /home/0xbanuchichak/about.txt</div>
+      <div style="color:var(--green-dim)">Welcome to my corner of the internet. I'm <span style="color:var(--green)">0xbanuchichak</span> — a cybersecurity enthusiast, CTF player, and security researcher who writes about what I break, learn, and exploit.</div>
+    </div>
+    <h2>// skills &amp; tools</h2>
+    <div class="skills-grid">
+      <div class="skill-item">Kali Linux</div><div class="skill-item">Burp Suite</div><div class="skill-item">Wireshark</div>
+      <div class="skill-item">Metasploit</div><div class="skill-item">Nmap</div><div class="skill-item">Python</div>
+      <div class="skill-item">Bash</div><div class="skill-item">Ghidra</div><div class="skill-item">IDA Pro</div>
+      <div class="skill-item">SQLMap</div><div class="skill-item">Hashcat</div><div class="skill-item">Docker</div>
+    </div>
+    <h2 style="margin-top:2.5rem">// certifications</h2>
+    <div style="margin:1rem 0">
+      <span class="cert-badge"><span class="dot">●</span> OSCP (in progress)</span>
+      <span class="cert-badge"><span class="dot">●</span> eJPT</span>
+      <span class="cert-badge"><span class="dot">●</span> CompTIA Security+</span>
+      <span class="cert-badge"><span class="dot">●</span> TryHackMe Top 1%</span>
+      <span class="cert-badge"><span class="dot">●</span> HackTheBox Pro</span>
+    </div>
+    <h2 style="margin-top:2.5rem">// journey</h2>
+    <div style="margin-top:1.5rem">
+      <div class="timeline-item"><div class="timeline-date">2025 →</div><div class="timeline-title">Started this blog</div><p style="font-size:.85rem;color:var(--text-dim)">Documenting research, CTF writeups, and security findings.</p></div>
+      <div class="timeline-item"><div class="timeline-date">2024</div><div class="timeline-title">First CVE Research</div><p style="font-size:.85rem;color:var(--text-dim)">Discovered and responsibly disclosed vulnerabilities.</p></div>
+      <div class="timeline-item"><div class="timeline-date">2023</div><div class="timeline-title">Active CTF Competitor</div><p style="font-size:.85rem;color:var(--text-dim)">Participated in national and international CTF competitions.</p></div>
+    </div>
+    <h2 style="margin-top:2.5rem">// contact</h2>
+    <p>Find me on the usual channels. I don't bite — unless you're a vulnerable web app.</p>
+    <div style="display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap">
+      <a href="https://github.com/" target="_blank" class="btn btn-secondary">GitHub</a>
+      <a href="https://twitter.com/" target="_blank" class="btn btn-secondary">Twitter/X</a>
+      <a href="https://linkedin.com/" target="_blank" class="btn btn-secondary">LinkedIn</a>
+      <a href="mailto:you@example.com" class="btn btn-secondary">Email</a>
+    </div>
+    <div style="margin-top:3rem;padding:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted)">
+      <strong style="color:var(--green)">// disclaimer</strong><br/><br/>
+      All content on this blog is for educational purposes only. Techniques described are used in legal, authorized environments. Always hack ethically and with permission.
+    </div>
+  </div>
+  <footer class="site-footer"><div class="footer-inner"><div class="footer-left"><span class="logo">0xbanuchichak</span><p>Exploring the dark side of security, one writeup at a time.</p></div><div class="footer-right"><div class="footer-links"><a href="https://github.com/" target="_blank">GitHub</a></div><p class="footer-copy">© 2025 0xbanuchichak.</p></div></div></footer>
+  <script src="js/matrix.js"></script>
+</body>
+</html>

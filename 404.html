@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 — 0xbanuchichak</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    .err-page {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+    .err-code {
+      font-family: var(--font-display);
+      font-size: 8rem;
+      font-weight: 900;
+      color: var(--green);
+      text-shadow: 0 0 60px var(--green), 0 0 120px rgba(0,255,65,0.3);
+      line-height: 1;
+      margin-bottom: 1rem;
+      animation: glitch 3s infinite;
+    }
+    @keyframes glitch {
+      0%,90%,100% { transform: translate(0); }
+      91% { transform: translate(-2px, 1px); filter: hue-rotate(90deg); }
+      93% { transform: translate(2px, -1px); filter: hue-rotate(-90deg); }
+      95% { transform: translate(-1px, 2px); }
+    }
+    .err-msg {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+    .err-sub {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="matrix-bg" id="matrixBg"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-wrap">
+        <span class="logo-prefix">~/</span>
+        <a href="index.html" class="logo">0xbanuchichak</a>
+        <span class="cursor-blink">_</span>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">home</a>
+        <a href="posts.html" class="nav-link">posts</a>
+        <a href="about.html" class="nav-link">about</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="err-page">
+    <div class="err-code">404</div>
+    <p class="err-msg">$ Page not found</p>
+    <p class="err-sub">The resource you requested does not exist on this server.<br/>Maybe it was moved, deleted, or never existed.</p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center">
+      <a href="index.html" class="btn btn-primary">← Go Home</a>
+      <a href="posts.html" class="btn btn-secondary">Browse Posts</a>
+    </div>
+  </div>
+
+  <script src="js/matrix.js"></script>
+</body>
+</html>
